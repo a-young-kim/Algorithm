@@ -1,30 +1,18 @@
 def solution(id_list, report, k):
-    answer = []
-    myDic = {}
-    idDic = {}
+    answer = [0] * len(id_list)
+    myDic = {x : 0 for x in id_list}
     
     report = list(set(report))
-    for id in id_list:
-        myDic[id] = 0
-        idDic[id] = []
-        
+    
     for ch in report:
         start , end = ch.split(" ")
-        idDic[start].append(end)
         myDic[end] += 1
-                
-    result = []
-    for id in id_list:
-        if myDic[id] >= k:
-            result.append(id)
-            
-    for id in id_list:
-        count = 0
-        for name in idDic[id]:
-            if name in result:
-               count+= 1
-            
-        answer.append(count)
-            
+
+    for i in range(0, len(report)):
+        start , end = report[i].split(" ")
+
+        if myDic[end] >= k:
+            answer[id_list.index(start)] += 1
+    
         
     return answer
