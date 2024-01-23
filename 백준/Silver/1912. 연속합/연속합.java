@@ -1,10 +1,9 @@
 import java.util.Scanner;
 
 public class Main {
-	final static int min = -10000;
 	static int N;
 	static int[] arrayNum;
-	static int max = min;
+	static int max = -10000;
 	
 	public static void main(String[] args) {
 		
