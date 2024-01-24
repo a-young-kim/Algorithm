@@ -13,7 +13,7 @@ public class Main {
 			for(int i = row - 1; i > -1; i--) {
 				if(nums[i][col] == 6) break;
 				if(!isZero && nums[i][col] == 0) nums[i][col] = cnt;
-				if(isZero && nums[i][col] == cnt) nums[i][col] = 0;
+				else if(isZero && nums[i][col] == cnt) nums[i][col] = 0;
 			}
 		}
 		// 하
@@ -22,7 +22,7 @@ public class Main {
 			for(int i = row + 1; i < N; i++) {
 				if(nums[i][col] == 6) break;
 				if(!isZero && nums[i][col] == 0) nums[i][col] = cnt;
-				if(isZero && nums[i][col] == cnt) nums[i][col] = 0;
+				else if(isZero && nums[i][col] == cnt) nums[i][col] = 0;
 			}
 		}
 		
@@ -32,7 +32,7 @@ public class Main {
 			for(int i = col - 1; i > -1; i--) {
 				if(nums[row][i] == 6) break;
 				if(!isZero && nums[row][i] == 0) nums[row][i] = cnt;
-				if(isZero && nums[row][i] == cnt) nums[row][i] = 0;
+				else if(isZero && nums[row][i] == cnt) nums[row][i] = 0;
 			}
 		}
 		//우
@@ -41,7 +41,7 @@ public class Main {
 			for(int i = col + 1; i < M; i++) {
 				if(nums[row][i] == 6) break;
 				if(!isZero && nums[row][i] == 0) nums[row][i] = cnt;
-				if(isZero && nums[row][i] == cnt) nums[row][i] = 0;
+				else if(isZero && nums[row][i] == cnt) nums[row][i] = 0;
 			}
 		}
 
