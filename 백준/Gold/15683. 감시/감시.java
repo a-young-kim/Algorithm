@@ -75,7 +75,7 @@ public class Main {
 			for(int col = 0; col < M; col++) {
 				if(answer == 0) return;
 				if(row == startRow && col < startCol) continue;
-				if(nums[row][col] == 0 || nums[row][col] == -1 || nums[row][col] == 6) continue;
+				if(nums[row][col] <= 0 || nums[row][col] == 6) continue;
 				switch(nums[row][col]) {
 					// 한 방향
 					case 1:{
