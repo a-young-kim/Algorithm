@@ -113,32 +113,20 @@ public class Main {
 					}
 					// 세 방향 확인
 					// 우(4) 좌(3) 하(2) 상(1)
-					// 상하좌, 상하우, 좌하우
+					// 상하좌, 상하우, 좌하우 상좌우
 					case 4:{
-						for(int i = 1; i < 3; i++) {
-							changeNums(i, row, col, false);
-							changeNums(i + 1, row, col, false);
-							changeNums(i + 2, row, col, false);
+						for(int i = 1; i < 5; i++) {
+							for(int j = 1; j < 5; j++) {
+								if(i == j) continue;
+								changeNums(j, row, col, false);
+							}
 							findAll(row, col + 1);
-							changeNums(i, row, col, true);
-							changeNums(i + 1, row, col, true);
-							changeNums(i + 2, row, col, true);
+							for(int j = 1; j < 5; j++) {
+								if(i == j) continue;
+								changeNums(j, row, col, true);
+							}
 						}
-						changeNums(1, row, col, false);
-						changeNums(2, row, col, false);
-						changeNums(4, row, col, false);
-						findAll(row, col + 1);
-						changeNums(1, row, col, true);
-						changeNums(2, row, col, true);
-						changeNums(4, row, col, true);
-                        
-                        changeNums(1, row, col, false);
-						changeNums(3, row, col, false);
-						changeNums(4, row, col, false);
-						findAll(row, col + 1);
-						changeNums(1, row, col, true);
-						changeNums(3, row, col, true);
-						changeNums(4, row, col, true);
+						
 						break;
 					}
 					
