@@ -1,11 +1,11 @@
-import java.util.Arrays;
 import java.util.Scanner;
 
+// 왼쪽, 위를 미리 탐색하여서 탐색하였으면 제외
 public class Main {
 	static int[][] numArrays = new int[19][19];;
 	static int[][] visited = new int[19][19];
-	static final int[] dx = {-1, 1, 0, 0, -1, 1, 1, -1};
-	static final int[] dy = {0, 0, 1, -1, 1, -1, 1, -1};
+	static final int[] dx = {-1, 1, 0, 0, 1, -1, -1, 1};
+	static final int[] dy = {0, 0, -1, 1, -1, 1, -1, 1};
 	
 	public static int dfs(int check, int k, int row, int col, int num, boolean setVisited) {
 		if(row < 0 || row >= 19 || col < 0 || col >= 19) return num;
@@ -41,6 +41,7 @@ public class Main {
 					int[] setNum = new int[8];
 					// 0 1 가로 2 3세로 4 5 좌하 대각선 6 7 좌상 대각선
 					for(int k = 0; k < 8; k++) {
+						if(k % 2 == 0 && k != 0 && setNum[k] != 0) continue;
 						setNum[k] = dfs(numArrays[i][j], k, i + dy[k], j + dx[k], 0, false);
 						if(k % 2 == 1 && (setNum[k] + setNum[k - 1]) == 4) {
 							visited[i][j] = 1;
