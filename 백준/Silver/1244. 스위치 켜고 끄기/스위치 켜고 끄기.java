@@ -52,13 +52,8 @@ public class Main {
 	}
 	
 	public static void boy(int index) {
-		int cnt = 1;
-		for(int i = 1; i < N + 1; i++) {
-			if(i % index != 0) continue;
-			cnt = i;
-			break;
-		}
-		for(int i = cnt; i < N + 1; i = i + index) {
+		
+		for(int i = index; i < N + 1; i = i + index) {
 			switchArray[i] = (switchArray[i] == 1 ? 0: 1);
 		}
 	}
