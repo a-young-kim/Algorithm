@@ -12,7 +12,7 @@ public class Main {
 					answer = cnt;
 					return;
 				}
-				if(size != 0 && i - size < r && j - size < c) {
+				if(i - size < r && j - size < c) {
 					size = size / 2;
 					visited(i, j, size);
 				}
