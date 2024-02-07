@@ -60,9 +60,7 @@ public class Solution {
 			for(int i = 1 ; i < N * N + 1 ; i++) {
 				if(cnt == N * N + 1) break;
 				Integer[] index = hashMap.get(i);
-				if(visited[index[0]][index[1]]) continue;
 				int visitedNum = dfs(index, 1);
-				
 				if(visitedNum > answerVisited) {
 					answerVisited = visitedNum;
 					answerNum = i;
@@ -84,6 +82,8 @@ public class Solution {
 		int col = start[1];
 		int nextNum = array[row][col] + 1;
 		cnt ++;
+		if(visited[row][col]) return visitedNum;
+		visited[row][col] = true;
 		// 왼쪽
 		if(col - 1 >= 0 && array[row][col - 1] == nextNum) {
 	
