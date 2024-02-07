@@ -58,7 +58,7 @@ public class Solution {
 			}
 			
 			for(int i = 1 ; i < N * N + 1 ; i++) {
-				if(cnt == N * N + 1) break;
+				//if(cnt == N * N + 1) break;
 				Integer[] index = hashMap.get(i);
 				int visitedNum = dfs(index, 1);
 				if(visitedNum > answerVisited) {
