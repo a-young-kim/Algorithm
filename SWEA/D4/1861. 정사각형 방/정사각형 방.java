@@ -3,7 +3,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.StringTokenizer;
-
+/*
+ * 메모리 40,352 kb
+ * 실행시간 180
+ */
 /*
  * 문제
  * N과 N 형태
@@ -32,7 +35,7 @@ public class Solution {
 
 	static int[][] array;
 	static boolean[][] visited;
-	static int N, cnt, answerNum = Integer.MAX_VALUE, answerVisited = Integer.MIN_VALUE;
+	static int N,answerNum = Integer.MAX_VALUE, answerVisited = Integer.MIN_VALUE;
 	static HashMap<Integer, Integer[]> hashMap;
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		
@@ -58,8 +61,8 @@ public class Solution {
 			}
 			
 			for(int i = 1 ; i < N * N + 1 ; i++) {
-				//if(cnt == N * N + 1) break;
 				Integer[] index = hashMap.get(i);
+				if(visited[index[0]][index[1]]) continue;
 				int visitedNum = dfs(index, 1);
 				if(visitedNum > answerVisited) {
 					answerVisited = visitedNum;
@@ -81,8 +84,7 @@ public class Solution {
 		int row = start[0];
 		int col = start[1];
 		int nextNum = array[row][col] + 1;
-		cnt ++;
-		if(visited[row][col]) return visitedNum;
+
 		visited[row][col] = true;
 		// 왼쪽
 		if(col - 1 >= 0 && array[row][col - 1] == nextNum) {
