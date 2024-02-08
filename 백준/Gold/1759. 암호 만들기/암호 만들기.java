@@ -5,7 +5,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
-
+/*
+ * 메모리:18720
+ * 시간:112
+ */
 /*
  * 문제
  * 암호는 서로 다른 L개의 알파벳 소문자들로 구성되며 
