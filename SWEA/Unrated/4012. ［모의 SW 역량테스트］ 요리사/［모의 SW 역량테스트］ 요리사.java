@@ -85,6 +85,7 @@ public class Solution {
 				}
 			}
 			answer = Math.min(answer, Math.abs(A - B));
+            return;
 		}
 		
 		for(int i = idx; i < N; i++) {
