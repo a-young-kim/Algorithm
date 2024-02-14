@@ -44,8 +44,8 @@ public class Main {
 			price[i] = Integer.parseInt(st.nextToken());;
 		}
 		
-		int min = price[0];
-		int answer = 0;
+		long min = price[0];
+		long answer = 0;
 		for(int i = 0;i < N - 1; i ++) {
 			answer += min * distance[i];
 			
