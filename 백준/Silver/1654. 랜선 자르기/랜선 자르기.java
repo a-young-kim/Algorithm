@@ -35,7 +35,7 @@ import java.util.StringTokenizer;
  */
 public class Main {
 	
-	static long[][] array;
+	static long[] array;
 	public static void main(String[] args) throws IOException {
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -44,38 +44,16 @@ public class Main {
 		int K = Integer.parseInt(st.nextToken());
 		int N = Integer.parseInt(st.nextToken());
 		
-		array = new long[K][3];
-		long sum = 0;
+		array = new long[K];
 		long max = Integer.MIN_VALUE;
 		
 		for(int i = 0; i < K; i++) {
 			st = new StringTokenizer(br.readLine());
-			array[i][0] = Integer.parseInt(st.nextToken());
-			sum += array[i][0];
-			max = Math.max(max,  array[i][0]);
+			array[i] = Integer.parseInt(st.nextToken());
+			max = Math.max(max,  array[i]);
 		}
 		
-		long answer = sum / N;
-		int cnt;
-		long start = 0, end = max;
-		while(true) {
-			cnt = 0;
-			for(int i = 0; i < array.length; i++) {
-				array[i][1] = array[i][0] / answer;
-				array[i][2] = array[i][0] % answer;
-				cnt += array[i][1];
-			}
-
-			Arrays.sort(array, (v1, v2) -> {
-				return (int)(-v1[2] + v2[2]);
-			});
-			
-			if(cnt >= N) break;
-			end = answer;
-			answer = array[0][0] / (array[0][1] + 1);
-		}
-		start = answer;
-		System.out.println(f(start, end, N));
+		System.out.println(f(1, max, N));
 
 	}
 	
@@ -85,7 +63,7 @@ public class Main {
 			long mid = (start + end) / 2;
 			int cnt = 0;
 			for(int i = 0; i < array.length; i++) {
-				cnt +=  array[i][0] / mid;
+				cnt += array[i] / mid;
 			}
 			if(cnt >= N) {
 				result = mid;
