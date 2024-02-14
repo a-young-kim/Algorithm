@@ -85,9 +85,7 @@ public class Main {
 			long mid = (start + end) / 2;
 			int cnt = 0;
 			for(int i = 0; i < array.length; i++) {
-				array[i][1] = array[i][0] / mid;
-				array[i][2] = array[i][0] % mid;
-				cnt += array[i][1];
+				cnt +=  array[i][0] / mid;
 			}
 			if(cnt >= N) {
 				result = mid;
