@@ -56,7 +56,6 @@ public class Main {
 			if(array[i][0] == 'x') continue;
 			visited[i][0] = true;
 			f(i, 0, false);
-			visited[i][0] = false;
 		}
 		System.out.println(answer);
 	}
