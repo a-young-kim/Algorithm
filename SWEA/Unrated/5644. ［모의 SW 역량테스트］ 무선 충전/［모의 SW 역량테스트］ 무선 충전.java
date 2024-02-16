@@ -10,6 +10,10 @@ import java.util.StringTokenizer;
 import javax.swing.InputMap;
 
 /*
+ * 메모리:30032\
+ * 시간:208
+ */
+/*
  * 문제
  * 최적의 BC를 선택하는 알고리즘을 개발하고자 한다.
  * 10 * 10 영역이 주어졌을 떄
@@ -41,16 +45,16 @@ import javax.swing.InputMap;
  * 
  * 풀이방식
  * AB의 이동을 좌표로 표시
- * 충전 가능 위치를 표시 -> 이차원 배열
- * 리스트를 이용하여 각 배열에 얼만큼 크기의 BC를 사용할 수 있는지 확인 --> 내림차순으로 정렬
- * 같은 위치 A와 B가 있을 경우 시간 순으로 정렬
+ * 충전 가능 위치를 표시 -> 이차원 배열 -> 이차원 배열 = 4차원 배열
+ * 각 배열 위치에서 얼만큼 크기의 BC를 사용할 수 있는지 확인 --> 정렬
+ * 에 최대 2명이 같이 BC를 사용할 수 있기 때문에 각 배열에서 최대 2개인 BC만 indexNum과 크기 저장
  */
 public class Solution {
 	
 	static int M, A;
 	static int[] dx = {0, 0, 1, 0, -1}, dy = {0, -1, 0, 1, 0};
-	static int[][] arrayA, arrayB, arrayAC;
-	static int[][][][] AC;
+	static int[][] arrayA, arrayB;
+	static int[][][][] array_BC;
 	static boolean[][] visited;
 
 	public static void main(String[] args) throws IOException {
@@ -64,6 +68,7 @@ public class Solution {
 			M = Integer.parseInt(st.nextToken());
 			A = Integer.parseInt(st.nextToken());
 			
+			// 각각 좌표 지정
 			arrayA = new int[M + 1][2];
 			arrayA[0][0] = 1;
 			arrayA[0][1] = 1;
@@ -84,8 +89,8 @@ public class Solution {
 				arrayB[i][1] = arrayB[i - 1][1] + dx[n];
 			}
 			
-			arrayAC = new int[11][11];
-			AC = new int[11][11][2][2];
+			// 10 * 10 배열에서 각 위치에 올수 있는 BC 중 P가 큰 최대 2개만 저장
+			array_BC = new int[11][11][2][2];
 			for(int i = 0; i < A; i++) {
 				st = new StringTokenizer(br.readLine());
 				int col = Integer.parseInt(st.nextToken());
@@ -96,12 +101,12 @@ public class Solution {
 				visited = new boolean[11][11];
 				visited[row][col] = true;
 				f(row, col, c, p, row, col, i + 1);
+			
 			}
 			
 			// 이동
 			int answerA = 0;
 			int answerB = 0;
-			visited = new boolean[11][11];
 			for(int i = 0;i < M + 1; i++) {
 				int rowA = arrayA[i][0];
 				int colA = arrayA[i][1];
@@ -109,46 +114,45 @@ public class Solution {
 				int rowB = arrayB[i][0];
 				int colB = arrayB[i][1];
 				
-				
-				if(AC[rowA][colA][1][1] !=  AC[rowB][colB][1][1]) {
-					answerA += AC[rowA][colA][1][0];
-					answerB += AC[rowB][colB][1][0];
+				// 두 위치에서 사용할 수 있는 최대의 BC가 같지 않은 경우 각각 최대 값 사용
+				if(array_BC[rowA][colA][1][1] !=  array_BC[rowB][colB][1][1]) {
+					answerA += array_BC[rowA][colA][1][0];
+					answerB += array_BC[rowB][colB][1][0];
 				}
+				// 두 위치에서 사용할 수 있는 최대의 BC가 같은 경우
 				else {
-					if(AC[rowA][colA][0][0] >= AC[rowB][colB][0][0]) {
-						answerA += AC[rowA][colA][0][0];
-						answerB += AC[rowB][colB][1][0];
+					// 두번째 BC의 크기를 비교해서 더 큰 것은 두번째것 사용, 더 작은 것은 첫번째것 사용
+					if(array_BC[rowA][colA][0][0] >= array_BC[rowB][colB][0][0]) {
+						answerA += array_BC[rowA][colA][0][0];
+						answerB += array_BC[rowB][colB][1][0];
 						
 					}
 					else {
-						answerA += AC[rowA][colA][1][0];
-						answerB += AC[rowB][colB][0][0];
+						answerA += array_BC[rowA][colA][1][0];
+						answerB += array_BC[rowB][colB][0][0];
 					}
 				}
 			}
-			System.out.println("#" + test_case + " " + (answerA + answerB));
+				System.out.println("#" + test_case + " " + (answerA + answerB));
 		}
 	}
 	public static void f(int row, int col, int c, int p, int startRow, int startCol, int check) {
 		
+		// 거리가 C보다 커지는 경우 return
 		int num = Math.abs(row - startRow) + Math.abs(col - startCol);
 		if(num > c) return;
 
-		// 앞에가 가장 작은 것
-		// p가 같지만 위치가 다른 경우는 ???
-		if(AC[row][col][0][0] < p) {
-			AC[row][col][0][0] = p;
-			AC[row][col][0][1] = check;
-			Arrays.sort(AC[row][col], Comparator.comparingInt(arr -> arr[0]));
-			
-			if(AC[row][col][0][0] != 0) {
-				arrayAC[row][col] = 2;
-			}
-			else {
-				arrayAC[row][col] = 1;
-			}
+		// 이미 저장되어 있는 최소 값보다 새로운 BC의 P가 크면 저장
+		if(array_BC[row][col][0][0] < p) {
+			// BC 충전 크기 저장
+			array_BC[row][col][0][0] = p;
+			// BC 번호 저장
+			array_BC[row][col][0][1] = check;
+			// 정렬
+			Arrays.sort(array_BC[row][col], Comparator.comparingInt(arr -> arr[0]));
 		}
-
+		
+		// BC가 충전 가능한 범위 찾기
 		for(int i = 1; i < 5; i++) {
 			if(row + dy[i] <= 0 || row + dy[i] > 10) continue;
 			if(col + dx[i] <= 0 || col + dx[i] > 10) continue;
@@ -157,5 +161,4 @@ public class Solution {
 			f(row + dy[i], col + dx[i], c, p, startRow, startCol, check);
 		}
 	}
-	
 }
