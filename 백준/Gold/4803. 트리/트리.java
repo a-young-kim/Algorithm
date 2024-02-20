@@ -8,7 +8,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.TreeSet;
 
 /*
  * 문제
@@ -40,10 +42,9 @@ import java.util.StringTokenizer;
 public class Main {
 	
 	static int n, m, answer;
-	static HashMap<Integer, List<Integer>> hashMap;
-	static Queue<Integer> q;
-	static LinkedList<Integer> list;
-	static boolean[] visited;
+	static int[] node;
+	static Set<Integer> set;
+	
 	public static void main(String[] args) throws IOException {
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -53,46 +54,34 @@ public class Main {
 			st = new StringTokenizer(br.readLine());
 			n = Integer.parseInt(st.nextToken());
 			m = Integer.parseInt(st.nextToken());
+
 			answer = 0;
 
 			if(n == 0 && m == 0) break;
 
-			hashMap = new HashMap<>();
+			set = new TreeSet<>();
+			node = new int[n + 1];
+			for(int i = 1;i < n + 1; i++) {
+				node[i] = i;
+			}
+			
 			for(int i = 0;i < m ; i++) {
 				st = new StringTokenizer(br.readLine());
 				int a = Integer.parseInt(st.nextToken());
 				int b = Integer.parseInt(st.nextToken());
-				
-				if(!hashMap.containsKey(a)) {
-					List<Integer> list = new ArrayList<>();
-					list.add(b);
-					hashMap.put(a,  list);
-				}
-				else {
-					hashMap.get(a).add(b);
-				}
-				
-				if(!hashMap.containsKey(b)) {
-					List<Integer> list = new ArrayList<>();
-					list.add(a);
-					hashMap.put(b,  list);
-				}
-				else {
-					hashMap.get(b).add(a);
-				}
-			}
 
-			list = new LinkedList<>();
-			visited = new boolean[n + 1];
-			for(int i = 1;i < n + 1; i++) {
-				if(visited[i]) continue;
-				//System.out.println(Arrays.toString(visited));
-				list.add(i);
-				visited[i] = true;
-				answer ++;
-				dfs(false);
-				list.pop();
+				union(a, b);
 			}
+			
+			Set<Integer> set2 =  new TreeSet<>();
+			for(int i = 1; i < n + 1; i++) {
+				node[i] = find(node[i]);
+			}
+			for(int num: set) {
+				set2.add(find(num));
+			}
+			
+			answer = (int) (Arrays.stream(node).distinct().count() - 1 - set2.size());
 			if(answer >= 2) {
 				System.out.println("Case " + test_case + ": A forest of " + answer + " trees.");
 			}
@@ -107,32 +96,26 @@ public class Main {
 		}
 	}
 	
-	public static boolean dfs(boolean flag) {
-		if(list.isEmpty()) return flag;
+	public static int find(int num) {
+		if(node[num] == num) return num;
+		else num = find(node[num]);
+		return num;
+	}
+	
+	public static void union(int first, int second) {
 		
-		int node = list.get(list.size() - 1);
-		if(!hashMap.containsKey(node)) return flag;
-		for(Integer num: hashMap.get(node)) {
-			if(visited[num]) {
-				if((list.size() > 1) && (list.get(list.size() - 2).equals(num))) {
-					continue;
-				}
-				else if(!flag) {
-					/*System.out.println(list.get(list.size() - 2));
-					System.out.println(num);
-					System.out.println(list.get(list.size() - 2) == num);*/
-					flag = true;
-					answer--;
-				}
-				continue;
-			}
-			
-			visited[num] = true;
-			list.add(num);
-			//System.out.println(list.toString());
-			flag = dfs(flag);
-			list.remove(list.size() - 1);
+		int firstRoot = find(first);
+		int secondRoot = find(second);
+		if(firstRoot == secondRoot) {
+			set.add(firstRoot);
+			return;
 		}
-		return flag;
+		
+		if(node[firstRoot] < node[secondRoot]) {
+			node[secondRoot] = firstRoot;
+		}
+		else {
+			node[firstRoot] = secondRoot;
+		}
 	}
 }
