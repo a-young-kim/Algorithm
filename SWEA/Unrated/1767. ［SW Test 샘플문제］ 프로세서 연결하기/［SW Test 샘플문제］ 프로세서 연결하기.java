@@ -2,11 +2,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
+/*
+ * 메모리: 24392
+ * 실행시간: 3488
+ */
 /*
  * 문제
  * N * N
@@ -27,7 +29,7 @@ import java.util.StringTokenizer;
  */
 public class Solution {
 	
-	static int N, coreCount, answer = Integer.MAX_VALUE;
+	static int N, coreCount, answer = Integer.MAX_VALUE, answerCore = Integer.MIN_VALUE;
 	static int[][] map;
 	static List<Node> list;
 	static List<int[]> allCoreList;
@@ -57,16 +59,14 @@ public class Solution {
 			}
 			
 			
-			
 			answer = Integer.MAX_VALUE;
-			for(int i = list.size(); i > 0; i--) {
-				myCore = new Node[i];
-				coreDir = new int[i];
-				// 조합
-				f(0, 0, i, 0);
+			answerCore = Integer.MIN_VALUE;
+			
+			myCore = new Node[list.size()];
+			coreDir = new int[list.size()];
+			// 조합
+			f(0, 0, 0);
 
-				if(answer != Integer.MAX_VALUE) break;
-			}
 			System.out.println("#" + test_case + " " + answer);
 		}
 
@@ -106,13 +106,16 @@ public class Solution {
 		return count;
 	}
 	
-	public static void f(int idx, int cnt, int max, int sum) {
+	public static void f(int idx, int cnt, int sum) {
 		
-		if(cnt == max) {
-			answer = Math.min(answer,  sum);
-			return;
+		if(cnt > answerCore) {
+			answerCore = cnt;
+			answer = sum;
 		}
 		
+		else if (answerCore == cnt) answer = Math.min(answer,  sum);
+		
+		if(cnt == list.size()) return;
 		if(idx == list.size()) return;
 		
 		for(int i = idx; i < list.size(); i++) {
@@ -124,7 +127,7 @@ public class Solution {
 					check(cnt, false);
 					continue;
 				}
-				f(i + 1, cnt + 1, max, sum + count);
+				f(i + 1, cnt + 1, sum + count);
 				check(cnt, false);
 			}
 		}
