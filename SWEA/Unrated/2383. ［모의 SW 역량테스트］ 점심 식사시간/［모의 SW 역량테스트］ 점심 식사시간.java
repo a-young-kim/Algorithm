@@ -96,9 +96,10 @@ public class Solution {
     }
 
     public static void f(int cnt, int idx){
-        go();
+        go(true);
+        go(false);
 
-        if(cnt == people.size()) return;
+        if(cnt == people.size() / 2) return;
 
         for(int i = idx; i < people.size(); i++){
             visited[i] = true;
@@ -107,7 +108,7 @@ public class Solution {
         }
 
     }
-    public static void go() {
+    public static void go(boolean flag) {
         // true
         Queue<PersonInStair> stair1 = new ArrayDeque<>();
         Queue<Person> stair1Wait = new ArrayDeque<>();
@@ -133,13 +134,13 @@ public class Solution {
                 p.stair1 --;
                 p.stair2 --;
 
-                if(p.stair1 == 0 && visited[p.node]) {
+                if(p.stair1 == 0 && visited[p.node] == flag) {
                     p.stair1Level = cnt;
                     stair1Wait.add(p);
                     continue;
                 }
 
-                if(p.stair2 == 0 && !visited[p.node]) {
+                if(p.stair2 == 0 && visited[p.node] != flag) {
                     p.stair2Level = cnt;
                     stair2Wait.add(p);
                     continue;
@@ -202,6 +203,8 @@ public class Solution {
         }
         answer = Math.min(answer, cnt);
     }
+
+
 
     public static class PersonInStair{
         int node;
