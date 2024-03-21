@@ -1,10 +1,12 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -27,19 +29,12 @@ import java.util.StringTokenizer;
  * 케이스마다 한줄씩 프로젝트 팀에 속하지 못한 학생 수
  * 
  * 풀이
- * 유니온 파인드
- * 1. T 입력 -> for문
- * 2. n입력 -> 학생 수
- * 3. 선택 번호 입력할 때 마다 union 함수 실행
- * 4. union에서 넣으려는 값과 저장하려는 값이 같아질 경우 개수 return
+ * 노드의 차수를 이용해서 풀어 보기
  * 
- * 시간 복잡도 해결 방법
- * -> 중간에 연결 된 친구들은 끝까지 루프가 될 수 없다. 
  */
 public class Main {
 	static int[] array;
-	static Set<Integer> set, preset;
-	static Set<Integer> nogroup;
+	static int[] arrayEdge;
 	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -51,43 +46,39 @@ public class Main {
 			
 			int N = Integer.parseInt(st.nextToken());
 			array = new int[N + 1];
+			arrayEdge = new int[N + 1];
 			
-			for(int i = 1; i < N + 1; i++) {
-				array[i] = i;
-			}
-			
-			set = new HashSet<>();
-			nogroup = new HashSet<>();
 			st= new StringTokenizer(br.readLine());
 			for(int i = 1; i < N + 1; i++) {
-				int next = Integer.parseInt(st.nextToken());
-				
-				union(i, next);
+				array[i] = Integer.parseInt(st.nextToken());
+				arrayEdge[array[i]] ++;
 			}
-			System.out.println(N - set.size());
+			
+			
+			boolean[] visited = new boolean[N + 1];
+			Queue<Integer> queue = new ArrayDeque<>();
+			for(int i = 1; i < N + 1; i++) {
+				if(arrayEdge[i] == 0) queue.add(i);
+			}
+			
+			while(!queue.isEmpty()) {
+				int node = queue.poll();
+				
+				visited[node] = true;
+				if(array[node] != node) arrayEdge[array[node]] --;
+				
+				if(visited[array[node]]) continue;
+				if(arrayEdge[array[node]] == 0) queue.add(array[node]);
+			}
+
+			int answer = 0;
+			for(int i = 1; i < N + 1; i++) {
+				if(arrayEdge[i] != 1) answer++;
+			}
+			System.out.println(answer);
+		
 		}
 	}
 	
-	public static int find(int num) {
-		if(nogroup.contains(num)) return 0;
-		if(set.contains(num)) return 0;
-		preset.add(num);
-		if(array[num] == num) return num;
-		return find(array[num]);
-	}
 	
-	
-	
-	public static void union(int a, int b) {
-		preset = new HashSet<>();
-		
-		int bRoot = find(b);
-		if(bRoot == 0) nogroup.add(a);
-		
-		if(a == bRoot) {
-			set.addAll(preset);
-			for(Integer num: preset) array[num] = num;
-		}
-		else array[a] = b;
-	}
 }
