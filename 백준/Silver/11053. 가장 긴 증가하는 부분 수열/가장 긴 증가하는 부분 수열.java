@@ -44,11 +44,11 @@ public class Main {
 			boolean check = false;
 			for(int j = i - 1; j >= 1; j--) {
 				if(array[i] > array[j]) {
-					dp[i] = Math.max(dp[j], dp[i]);
+					dp[i] = Math.max(dp[j] + 1, dp[i]);
 					check = true;
 				}
 			}
-			if(check) dp[i] ++;
+			//if(check) dp[i] ++;
 			answer = Math.max(answer,  dp[i]);
 		}
 		
