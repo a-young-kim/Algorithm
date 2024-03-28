@@ -68,13 +68,14 @@ public class Solution {
 			
 			int N = Integer.parseInt(st.nextToken());
 			int[][] dp = new int[N][N];
+
 			
-			for(int i = 0; i < N; i++) Arrays.fill(dp[i],  N * N);
 			for(int i = 0; i < N; i++) {
 				for(int j = 0; j < N; j++) {
 					int num = Integer.parseInt(st.nextToken());
 					if(i == j) dp[i][j] = 0;
 					else if(num == 1) dp[i][j] = 1;
+					else dp[i][j] = 2000;
 				}
 			}
 			
@@ -82,12 +83,10 @@ public class Solution {
 			for(int i = 0; i < N; i++) {
 				int cnt = 0;
 				for(int j = 0; j < N; j++) {
-					if(cnt > answer) break;
 					for(int k = 0; k < N; k++) {
 						dp[i][j] = Math.min(dp[i][j],  dp[i][k] + dp[k][j]);
 					}
 					cnt += dp[i][j];
-					
 				}
 				answer = Math.min(answer,  cnt);
 			}
