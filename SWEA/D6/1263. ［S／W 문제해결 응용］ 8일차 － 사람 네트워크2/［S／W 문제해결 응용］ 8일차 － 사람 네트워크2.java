@@ -61,6 +61,7 @@ public class Solution {
 		StringTokenizer st= new StringTokenizer(br.readLine());
 		
 		int T = Integer.parseInt(st.nextToken());
+		StringBuilder sb=new StringBuilder();
 		for(int test_case = 1; test_case <= T; test_case++)
 		{
 			st= new StringTokenizer(br.readLine());
@@ -90,9 +91,10 @@ public class Solution {
 				}
 				answer = Math.min(answer,  cnt);
 			}
-			System.out.println("#" + test_case + " " + answer);
+			sb.append("#" + test_case + " " + answer + "\n");
+			
 		}
-
+		System.out.println(sb);
 	}
 
 }
