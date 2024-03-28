@@ -5,6 +5,10 @@ import java.util.Arrays;
 import java.util.StringTokenizer;
 
 /*
+ * 실행시간: 5632
+ * 메모리: 108380
+ */
+/*
  * 문제
  * 1. N은 노드 수
  * 2. CC 다른 모든 사람에게 얼마나 가까운 가
@@ -49,7 +53,6 @@ import java.util.StringTokenizer;
  *  6. answer 출력
  *  			
  *  	
- *  
  */
 public class Solution {
 
@@ -78,6 +81,7 @@ public class Solution {
 			for(int i = 0; i < N; i++) {
 				int cnt = 0;
 				for(int j = 0; j < N; j++) {
+					if(cnt > answer) break;
 					for(int k = 0; k < N; k++) {
 						dp[i][j] = Math.min(dp[i][j],  dp[i][k] + dp[k][j]);
 					}
