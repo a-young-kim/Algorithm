@@ -90,7 +90,7 @@ public class Solution {
 				}
 				answer = Math.min(answer,  cnt);
 			}
-			sb.append("#" + test_case + " " + answer + "\n");
+			sb.append("#").append(test_case).append(" ").append(answer).append("\n");
 			
 		}
 		System.out.println(sb);
