@@ -59,17 +59,17 @@ public class Solution {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st= new StringTokenizer(br.readLine());
-		
+
 		int T = Integer.parseInt(st.nextToken());
 		StringBuilder sb=new StringBuilder();
 		for(int test_case = 1; test_case <= T; test_case++)
 		{
 			st= new StringTokenizer(br.readLine());
-			
+
 			int N = Integer.parseInt(st.nextToken());
 			int[][] dp = new int[N][N];
 
-			
+
 			for(int i = 0; i < N; i++) {
 				for(int j = 0; j < N; j++) {
 					int num = Integer.parseInt(st.nextToken());
@@ -78,20 +78,27 @@ public class Solution {
 					else dp[i][j] = 2000;
 				}
 			}
-			
+
+			for(int k = 0; k < N; k++) {
+				for(int j = 0; j < N; j++) {
+					for(int i = 0; i < N; i++) {
+						dp[i][j] = Math.min(dp[i][j],  dp[i][k] + dp[k][j]);
+					}
+				}
+			}
 			int answer = Integer.MAX_VALUE;
 			for(int i = 0; i < N; i++) {
 				int cnt = 0;
 				for(int j = 0; j < N; j++) {
-					for(int k = 0; k < N; k++) {
-						dp[i][j] = Math.min(dp[i][j],  dp[i][k] + dp[k][j]);
-					}
 					cnt += dp[i][j];
 				}
 				answer = Math.min(answer,  cnt);
 			}
+
+
+			//			sb.append("#" + test_case + " " + answer + "\n");
 			sb.append("#").append(test_case).append(" ").append(answer).append("\n");
-			
+
 		}
 		System.out.println(sb);
 	}
