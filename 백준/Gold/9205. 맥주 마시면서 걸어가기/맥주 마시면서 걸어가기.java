@@ -1,4 +1,8 @@
 /*
+ * 메모리: 14828
+ * 시간:124
+ */
+/*
  * 문제
  * 1. 상근이네 집에서 출발, 맥주 한 박스(20개)
  * 2. 50미터에 한 병씩 마신다. 50미터 가기전에 한병씩
@@ -51,7 +55,6 @@ public class Main {
             
             int N = Integer.parseInt(br.readLine());
             Queue<Node> queue = new ArrayDeque<>();
-            Node endNode;
             
             Node[] convi = new Node[N + 2];
             for(int i=0; i<N+2; i++) {
@@ -59,16 +62,9 @@ public class Main {
                 int X = Integer.parseInt(st.nextToken());
                 int Y = Integer.parseInt(st.nextToken());
                 if(i == 0) queue.add(new Node(i, X, Y));
-                else if(i == N + 1) endNode = new Node(i, X, Y);
                 convi[i] = new Node(i, X, Y);
             }
             
-            int[][] distances = new int[N + 2][N + 2];
-            for(int i = 0; i < N + 2; i++) {
-            	for(int j = 0; j < N + 2; j++) {
-            		distances[i][j] = Math.abs(convi[i].row - convi[j].row) + Math.abs(convi[i].col - convi[j].col);
-            	}
-            }
             
             boolean[] visited = new boolean[N + 2];
             visited[0] = true;
@@ -79,7 +75,7 @@ public class Main {
             	
             	for(int i = 0; i < N + 2; i++) {
             		if(visited[i]) continue;
-            		if(distances[node.node][i] > 1000) continue;
+            		if(Math.abs(convi[i].row - convi[node.node].row) + Math.abs(convi[i].col - convi[node.node].col) > 1000) continue;
             		
             		if(i == N + 1) {
             			flag = true;
