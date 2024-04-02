@@ -7,6 +7,10 @@ import java.util.Queue;
 import java.util.StringTokenizer;
 
 /*
+ * 메모리: 215560
+ * 시간: 1452
+ */
+/*
  * 문제
  * 1. 검정색 루피를 획득하면 도둑루피의 크기만큼 소지한 루피가 감소
  * 2. N * N 크기의 동굴 --> 제일 왼쪽 위 (0, 0)
@@ -46,6 +50,8 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	     StringTokenizer st ;
+	     StringBuilder sb = new StringBuilder();
+	     
 	     
 	     int cnt = 1;
 	     while(true) {
@@ -54,17 +60,21 @@ public class Main {
 	    	 if(N == 0) break;
 	    	 
 	    	 int[][] map = new int[N][N];
+	    	 int[][] dp = new int[N][N];
+	    	 
 	    	 for(int i = 0; i < N; i++) {
 	    		 st = new StringTokenizer(br.readLine());
 	    		 for(int j = 0; j < N; j++) {
 	    			 map[i][j] = Integer.parseInt(st.nextToken());
+	    			 dp[i][j] = Integer.MAX_VALUE;
 	    		 }
 	    	 }
-	    	 int[][] dp = new int[N][N];
-	    	 for(int i = 0; i < N; i++) Arrays.fill(dp[i],  Integer.MAX_VALUE);
+	    	 
+
 	    	 dp[0][0] = map[0][0];
 	    	 Queue<Node> queue = new ArrayDeque<>();
 	    	 queue.add(new Node(0, 0, dp[0][0]));
+	    	 
 	    	 while(!queue.isEmpty()) {
 	    		 Node node = queue.poll();
 	    		 
@@ -82,10 +92,11 @@ public class Main {
 	    		 }
 	    	 }
 	    	 
-	    	 System.out.println("Problem " + cnt + ":" + " " + dp[N - 1][N - 1]);
+	    
+	    	 sb.append("Problem ").append(cnt).append(":").append(" ").append(dp[N - 1][N - 1]).append("\n");
 	    	 cnt++;
 	     }
-
+	     System.out.println(sb);
 	}
 	
 	public static class Node{
