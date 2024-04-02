@@ -68,7 +68,7 @@ public class Main {
 	    		 st = new StringTokenizer(br.readLine());
 	    		 for(int j = 0; j < N; j++) {
 	    			 map[i][j] = Integer.parseInt(st.nextToken());
-	    			 dp[i][j] = INF;
+	    			 dp[i][j] = Integer.MAX_VALUE;
 	    		 }
 	    	 }
 	    	 
