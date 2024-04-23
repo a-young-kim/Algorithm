@@ -1,8 +1,5 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 /*
  * 문제
@@ -55,7 +52,11 @@ public class Main {
 			answer[i] = arr[i] + answer[node[i]];
 		}
 		
-		for(int i = 1; i < N + 1; i++) System.out.print(answer[i] + " ");
+        StringBuilder sb = new StringBuilder();
+		for(int i = 1;i<=N;i++) {
+			sb.append(answer[i]+ " ");
+		}
+		System.out.println(sb);
 	}
 
 }
