@@ -43,56 +43,47 @@ f(int num, int end):
      visited[num + 1] = true;
     f(num + 1, end)
     visited[num + 1] = false;
+
+dp 풀이
+1. dp[i] = dp[i - 2] + dp[i - 1]
+2.
  */
 public class Main {
-    static int N, answer;
-    static boolean[] visited, vip;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
-        N = Integer.parseInt(st.nextToken());
+        int N = Integer.parseInt(st.nextToken());
+
+        if(N == 1) {
+            System.out.println(1);
+            return;
+        }
+        int[] dp = new int[N + 1];
+        dp[0] = 1;
+        dp[1] = 1;
+        dp[2] = 2;
+        for(int i = 3; i < N + 1; i++){
+            dp[i] = dp[i - 1] + dp[i - 2];
+        }
 
         st = new StringTokenizer(br.readLine());
         int M = Integer.parseInt(st.nextToken());
-
-        visited = new boolean[N + 1];
-        vip= new boolean[N + 1];
+        int answer = 1;
+        int vipSeat = 0;
         for(int i = 0; i < M; i++){
             st = new StringTokenizer(br.readLine());
             int num = Integer.parseInt(st.nextToken());
-            vip[num] = true;
+            /* 현재 VIP 좌석과 이전 VIP 좌석 사이의 빈 좌석의 수를 계산하여
+                이 빈 좌석 사이에서 사람들이 자유롭게 앉을 수 있는 경우의 수 계상
+             */
+            answer = answer * dp[num - vipSeat - 1];
+            vipSeat = num;
         }
-        f(1);
+        answer = answer * dp[N - vipSeat];
         System.out.println(answer);
     }
 
-    public static void f(int num){
-        if(num == N + 1) {
-            answer ++;
-            return;
-        }
 
-        if(vip[num]) f(num + 1);
-        else{
-            if(num - 1 > 0 && !visited[num - 1] && !vip[num - 1]) {
-                visited[num - 1] = true;
-                f(num + 1);
-                visited[num - 1] = false;
-            }
-            if(!visited[num] && !vip[num]){
-                visited[num] = true;
-                f(num + 1);
-                visited[num] = false;
-            }
-
-            if(num + 1 <= N && !visited[num + 1] && !vip[num + 1]) {
-                visited[num + 1] = true;
-                f(num + 1);
-                visited[num + 1] = false;
-            }
-
-        }
-
-    }
 }
