@@ -58,6 +58,7 @@ public class Main {
         long[] answer = new long[Q];
         HashMap<Long, Integer> visited = new HashMap<>();
         Deque<Long> nodes = new ArrayDeque<>();
+        StringBuilder sb = new StringBuilder();
 
         for(int i = 0; i < Q; i++){
             st = new StringTokenizer(br.readLine());
@@ -89,7 +90,9 @@ public class Main {
         }
 
         for(int i = 0; i < Q; i++){
-            System.out.println(answer[i]);
+           sb.append(answer[i]);
+           sb.append("\n");
         }
+        System.out.println(sb.toString());
     }
 }
