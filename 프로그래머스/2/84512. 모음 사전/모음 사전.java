@@ -1,22 +1,30 @@
-import java.util.HashMap;
+import java.util.*;
+
 
 class Solution {
-    final String[] alphabets = {"A", "E", "I", "O", "U"};
-	HashMap<String, Integer> wordDic = new HashMap<>();
+    int answer = 0;
+    HashSet<String> set = new HashSet<>();
+    final String[] alphabets= {"A", "E", "I", "O", "U"};
+    String endWord;
     
-    public void setDic(String str){
-		int length = str.length();
-		wordDic.put(str, wordDic.size());
-		
-		if(length > 4) return;
-		for(int i = 0; i < alphabets.length; i++) {
-			setDic(str + alphabets[i]);
-		}
-	}
-    public int solution(String word) {
-		setDic("");
-		
-		int answer = wordDic.get(word);
+    public int solution(String endWord) {
+        
+        this.endWord = endWord;
+        setDic("");
         return answer;
+    }
+    
+    public void setDic(String word){
+        if(answer != 0) return;
+        
+        if(word.length() > 5) return;
+        if(word.equals(endWord)) {
+            answer = set.size();
+            return;
+        }
+        set.add(word);
+        for(String c : alphabets){
+            setDic(word + c);
+        }
     }
 }
