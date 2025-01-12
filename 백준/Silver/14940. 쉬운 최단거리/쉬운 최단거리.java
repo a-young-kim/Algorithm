@@ -1,64 +1,64 @@
-import java.util.*;
-import java.io.*;
-
 /*
 문제
-1. 모든 지점에 대해서 목표 지점까지의 거리
-2. 가로 세로로만 움직임 가능
+1. 모든 지점에 대해서 목표지점까지의 거리
+2. 가로와 세로만 움직임 가능
 
 입력
-1. 지도 n, m 세로 가로 각각 1000이하
-2. n개의 줄에 m개의 숫자
-2.1 0을 갈수 없음 1을 갈 수 있음 2는 목표지점
-2.2 2는 단 한개
+1. 지도 크기 가로 n 세로 m
+2. 0은 갈 수 없는 땅 1은 갈 수 있는 땅 2는 목표 땅
 
 출력
-각 지점에서 목표지점까지의 거리를 출력
-원래 갈 수 없는 땅인 위치는 0 => 벽
-원래 갈 수 있는 땅인 부분 중에 도달할 수 없으면 -1
+각 지점에서 목표 지점까지의 거리를 출력
+원래 갈 수 없는 땅인 위치는 0 갈 수 있는 땅 중 도달할 수 없는 위치는 -1
 
-풀이
-1. n과 m 입력
-2. int[][] map = int[n][m] 생성
-3. map 입력 받기, queue생성
-3.1 도착지 부분은 queue에 저장
-4. bfs 시작
-5. result 출력
+아이디어 bfs
 
-bfs
-1. queue poll
-2. 상하좌우 탐색 후
-3. result의 값이 Integer.max가 아니면 continue, 맞으면 부모의 값 + 1넣기
-
+풀이과정
+1. int n, m 입력
+2. int[][] answer, int[][] map 생성, queue 생성
+2.1 answer은 -1로 초기화
+2.2. map 입력 하면서 2인 것은 queue에 넣기, 0인 것은 answer에도
+3. while(queue에 있을 때)
+3.1 Node node = queue.poll()
+3.2 for i in range(0, 4)
+3.2.1 int nr, nr
+3.2.2. 범위 체크
+3.2.3 갈수 없는 곳인지 방문한적있는지 체크
+3.2.4 answer[nr][nc] = node.wieght + 1;
  */
+import java.util.*;
+import java.io.*;
 public class Main {
+    static int[] dx = {-1, 1, 0, 0};
+    static int[] dy = {0, 0, -1, 1};
     public static void main(String[] args) throws IOException {
+
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
-        int n = Integer.parseInt(st.nextToken());
-        int m = Integer.parseInt(st.nextToken());
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
 
-        int[][] map = new int[n][m];
-        int[][] result = new int[n][m];
-        for(int i = 0 ;i < n; i++) Arrays.fill(result[i], -1);
-
+        int[][] answer = new int[N][M];
+        int[][] map = new int[N][M];
         Queue<Node> queue = new ArrayDeque<>();
-        for(int i = 0; i < n; i++){
+
+        for(int i = 0; i < N; i++){
+            Arrays.fill(answer[i], -1);
+        }
+        for(int i = 0; i < N; i++){
             st = new StringTokenizer(br.readLine());
-            for(int j = 0;j < m; j++){
-                int node = Integer.parseInt(st.nextToken());
-                if(node == 2)  {
-                    queue.add(new Node(i, j));
-                    result[i][j] = 0;
+            for(int j = 0; j < M; j++){
+                int num = Integer.parseInt(st.nextToken());
+
+                if(num == 0) answer[i][j] = 0;
+                if(num == 2) {
+                    answer[i][j] = 0;
+                    queue.add(new Node(i, j, 0));
                 }
-                else if(node == 0) result[i][j] = 0;
-                map[i][j] = node;
+                map[i][j] = num;
             }
         }
-
-
-        int[] dx = {1, -1, 0, 0}, dy = {0, 0, 1, -1};
 
         while(!queue.isEmpty()){
             Node node = queue.poll();
@@ -66,41 +66,34 @@ public class Main {
             for(int i = 0; i < 4; i++){
                 int nr = node.row + dy[i];
                 int nc = node.col + dx[i];
-                int level = result[node.row][node.col] + 1;
+                int nd = node.distance + 1;
 
-                if(nr < 0 || nr >= n) continue;
-                if(nc < 0 || nc >= m) continue;
-
-                if(result[nr][nc] != -1) continue;
-                else{
-                    result[nr][nc] = level;
-                    queue.add(new Node(nr, nc));
-                }
+                if(nr < 0 || nr >= N) continue;
+                if(nc < 0 || nc >= M) continue;
+                if(answer[nr][nc] >= 0) continue;
+                answer[nr][nc] = nd;
+                queue.add(new Node(nr, nc, nd));
             }
         }
 
-        for(int i = 0; i < n; i++){
-            for(int j  = 0; j < m; j++){
-                System.out.print(result[i][j] + " ");
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < N; i++){
+            for(int j = 0; j < M; j++){
+                sb.append(answer[i][j]);
+                sb.append(" ");
             }
-            System.out.println();
+            sb.append("\n");
         }
+        System.out.println(sb);
     }
 
     public static class Node{
-        int row, col;
-        public Node(int row, int col){
+        int row, col, distance;
+
+        public Node(int row, int col, int distance){
             this.row = row;
             this.col = col;
-        }
-
-        @Override
-        public String toString() {
-            return "Node{" +
-                    "row=" + row +
-                    ", col=" + col +
-                    '}';
+            this.distance = distance;
         }
     }
-
 }
