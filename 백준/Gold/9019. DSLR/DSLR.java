@@ -28,7 +28,7 @@ public class Main {
 
             int A = Integer.parseInt(st.nextToken());
             int B = Integer.parseInt(st.nextToken());
-            Node[] answer = new Node[100000];
+            Node[] answer = new Node[10001];
             answer[A] = new Node(null, A,'k');
 
             Queue<Node> queue = new ArrayDeque<>();
