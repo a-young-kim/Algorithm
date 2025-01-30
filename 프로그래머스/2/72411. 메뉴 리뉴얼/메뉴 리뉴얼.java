@@ -1,107 +1,95 @@
-import java.util.*;
-
 /*
-풀이
-1. int[] alpa = int[27]을 만들어서 호출 개수 세기
-2. 호출 개수의 최대 값 확인 int maxCount 
-3. orders과 비교하여 maxCount보다 작지만 orders중의 최대값 저장 int maxCnt
-4. List<HashMap<String, Integer>> 생성
-5. for i를 maxCnt 까지 돌려 list.add()
-6. f("", 0) 실행
-7. for문 list를 돌리기 -> 해당 index가 course에 있는지 확인
-8. int count = 0, List<String> list = new Array
-9. for(String key: hashMap.KeySet())
-9.1. int num = hashMap.get(key)
-9.2. num == count list.add
-9.3 num > count list = new, list.add
-10. answer.add(list);
+문제
+1. 단품 메뉴를 조합해서 코스 메뉴
+2. 최소 2가지 이상의 메뉴를 단품메뉴로 구성
+3. 최소 2명 이상의 손님으로부터 주문된 단품메뉴 조합에 대해서만 코스요리 메뉴 후보에 포함
+4.단품메뉴들의 갯수가 담긴 course 주어짐
+5. 새로 추가하게될 코스요리 메뉴의 구성을 문자열 형태로 return
+
+제한사항
+주문은 10이하의 문자열 -> 알파벳 대문자로만 이루어짐
+코스 배열은 10 이하 -> 오름차순 정렬
+사전순으로 오름차순 정렬해서 return
+
+아이디어
+조합 -> 2의 10승/ 10! 의 * 20 => 될 듯....아마
+
+풀이과정
+1. List<List<HashMap<String, Integer>>> list 생성
+2. for i in range(0, course[-1]) list 안에 hashmap 생성
+3. dfs() 조합
+4. return
 */
-
 import java.util.*;
-import java.io.*;
-
 class Solution {
-    List<HashMap<String, Integer>> list = new ArrayList();
-    List<String> answerList = new ArrayList<>();
-    
-    boolean[] needs;
-    int[] alphabet;
-    int maxCnt;
-    
+    List<HashMap<String, Integer>> list;
+    int maxNum;
+   
     public String[] solution(String[] orders, int[] course) {
-        String[] answer = {};
-        alphabet = new int[26];
-
-        for(int j = 0; j < orders.length; j++){
-            String order = orders[j];
-            for(int i = 0; i < order.length(); i++){
-                int index = order.charAt(i) - 'A';
-                alphabet[index] ++;
-            }
+       
+        
+        list = new ArrayList<>();
+        
+        for(int i = 0; i < 11; i++){
+            HashMap<String, Integer> map = new HashMap<>();
+            list.add(map);
+        }
+        
+        maxNum = course[course.length - 1];
+        
+        for(String order : orders){
             char[] array = order.toCharArray();
             Arrays.sort(array);
-            orders[j] = new String(array);
+            dfs(0, 0, array, "");
         }
         
-        System.out.println(Arrays.toString(alphabet));
-        System.out.println(Arrays.toString(orders));
+        List<String> result = new ArrayList<>();
         
-        needs = new boolean[11];
-        for(int c :course) {
-            needs[c] = true;
+        for(int num : course){
+            HashMap<String, Integer> map = list.get(num);
+            int cnt = 2;
+            List<String> cntList = new ArrayList<>();
+           
+            for(String key : map.keySet()){
+                Integer value = map.get(key);
+                
+                if(value == 1) continue;
+                if(value > cnt){
+                    cntList.clear();
+                    cnt = value;
+                    cntList.add(key);
+                }
+                else if(value == cnt) {
+                    cntList.add(key);
+                }
+            }
+            result.addAll(cntList);
         }
-        System.out.println(Arrays.toString(needs));
-        maxCnt = course[course.length - 1];
         
-        for(int i = 0; i < maxCnt + 1; i++) list.add(new HashMap<>());
-
-        for(String order: orders){
-            f(0, "", order);
-        }
-
+        String[] answer = new String[result.size()];
+        Collections.sort(result);
         
-        for(HashMap<String, Integer> hm: list) {
-            System.out.println(hm);
-            getAnswer(hm);
+        for(int i = 0; i < result.size(); i++){
+            answer[i] = result.get(i);
         }
         
-        answer = new String[answerList.size()];
-        for(int i = 0; i < answerList.size(); i++) answer[i] = answerList.get(i);
-        Arrays.sort(answer);
         return answer;
     }
     
-    public void f(int idx, String course, String order){
-        int len = course.length();
+    public void dfs(int idx, int cnt, char[] order, String myOrder){
         
-        if(needs[len]){
-            HashMap<String, Integer> hm = list.get(len);
-            if(hm.containsKey(course)) hm.put(course, hm.get(course) + 1);
-            else hm.put(course, 1);
+        HashMap<String, Integer> map = list.get(cnt);
+        if(map.containsKey(myOrder)) {
+            map.put(myOrder, map.get(myOrder) + 1);
+        }
+        else {
+            map.put(myOrder, 1);
         }
         
-        if(len == maxCnt + 1) return;
-
-        for(int i = idx; i < order.length(); i++){
-            char c = order.charAt(i);
-            if(alphabet[c - 'A'] <= 1) continue;
-           f(i + 1, course + c, order);
-        }
-    }
-    
-    public void getAnswer(HashMap<String, Integer> hashMap){
-        int max = 0;
-        for(String key: hashMap.keySet()){
-            int value = hashMap.get(key);
-            max = Math.max(max, value);
-        }
+        if(cnt == maxNum) return;
         
-        if(max <= 1) return;
-        
-        for(String key: hashMap.keySet()){
-            int value = hashMap.get(key);
-            if(max == value) answerList.add(key);
+        for(; idx < order.length; idx ++){
+            dfs(idx + 1, cnt + 1, order, myOrder + order[idx]);
         }
     }
-    
 }
