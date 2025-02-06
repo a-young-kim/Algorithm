@@ -1,68 +1,59 @@
-import java.util.*;
-import java.io.*;
-
 /*
 문제
-1. 어떤 순서를 따르는 요소들의 모음 -> 튜플
-2. 튜플의 성질
-    2.1 중복 원소 가능
-    2.2 원소 순서가 다르면 다른 튜플
-    2.3 원소의 개수 유한
-3. 원소의 개수가 n이고 중복되는 원소가 없는 튜플이 주어질 떄 가능한 집합이 주어진다. 
-4. 특정 튜플을 표현하는 집합이 담긴 문자열이 주어질 경우 s가 표현하는 튜플을 배열에 담아
-    return하시오
+1. 어떤 순서를 따르는 모음 => 튜플
+2. 튜플의 특징
+2.1 중복 원소 가능
+2.2 원소에는 순서 있음
+2.3 원소 개수는 유한함
+3. 원소의 개수가 n개이고 중복되는 원소가 없는 튜플이 주어짐
+4. 특정 튜플을 포현하는 집합이 담긴 문자열 s가 매개 변수로 주어질 때 s가 표현하는 튜플을 배열에 담아 return
+4.1 집합은 순서 상관없음
 
-제한사항
-1. s는 백만 이하
-2. s는 숫자와 {,}로 이루어져 잆음
-3. 숫자가 0으로 시작하는 경우는 없음
-4. s가 표현하는 튜플의 원소는 십만 이하 자연수
-5. return하는 배열의 길이가 1이상 500이하인 경우만 입력
+제한 사항
+1. s의 길이는 백만 이하
+2. 숫자 0으로 시작하는 경우는 없음
+3. s의 원소는 십만이하
 
-풀이
-1. List<List<Integer>> 생성
-2. 집합들을 LIst<List> 형식으로 변경
-3. List를 List의 길이 순으로 변경
-4. List<Integer> answer를 생성하여 입력
-5. list를 int로 변경하여 return
+아이디어
+크기가 작은 집합 순으로 정렬 해서 하나씩 뽑기
+
 */
+
+import java.util.*;
 class Solution {
     public int[] solution(String s) {
-        List<List<Integer>> data = new ArrayList<>();
-        String[] arr = s.split("\\{|}");
         
+        List<int[]> list = new ArrayList<>();
         
-        for(int i = 0; i < arr.length; i++){
-          if(arr[i].length() == 0) continue;
-            List<Integer> list = new ArrayList<>();
-            String[] arr2 = arr[i].split(",");
+        String[] inputsArr = s.split("[{}]");
+       
+        for(String inputs : inputsArr){
+            if(inputs.length() == 0) continue;
+            if(inputs.charAt(0) == ',') continue;
+            String[] inputArr = inputs.split(",");
             
-            if(arr2.length == 0) continue;
-            for(int j = 0;j < arr2.length; j++) {
-                if(arr2[j].length() == 0) continue;
-                list.add(Integer.parseInt(arr2[j]));
+            int[] arr = new int[inputArr.length];
+            for(int i = 0; i < inputArr.length; i++){
+                arr[i] = Integer.parseInt(inputArr[i]);                
             }
-            data.add(list);
+            
+            list.add(arr);
         }
         
-        Collections.sort(data, new Comparator<List<Integer>>(){
-            @Override
-            public int compare(List<Integer> o1, List<Integer> o2){
-                return o1.size() - o2.size();
-            }
-        });
         
-        //for(List<Integer> list: data) System.out.println(list);
-        List<Integer> listAnswer = new ArrayList<>();
-        for(List<Integer> list : data){
-            for(Integer num: list){
-                if(!listAnswer.contains(num)) listAnswer.add(num);
+        HashSet<Integer> set = new HashSet<>();
+        list.sort((o1, o2) -> (o1.length - o2.length));
+        int[] answer = new int[list.size()];
+        int idx = 0;
+        for(int[] arr : list){
+            for(int num : arr){
+                if(set.contains(num)) continue;
+            
+                answer[idx] = num;
+                idx ++;
+                set.add(num);
             }
         }
-        //System.out.println(listAnswer);
-        int[] answer = new int[listAnswer.size()];
-        
-        for(int i = 0; i < listAnswer.size(); i++) answer[i] = listAnswer.get(i);
         return answer;
     }
 }
